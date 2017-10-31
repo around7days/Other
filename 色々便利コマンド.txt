@@ -1,0 +1,283 @@
+****************** シェルコマンド ******************
+・パソコンのスペックを調べる
+	UNIX
+		CPU：cat /proc/cpuinfo
+		メモリ：free(vmstat)	:Kbytes表示
+	Solaris
+		CPU：psrinfo -v
+		メモリ：prtconf | grep Memory
+
+
+・ドライブ容量を調べる
+	df -引数（s:合計 k,m,h:○○バイト表示 ）
+
+・フォルダ容量を調べる
+	du -引数（s:合計 k,m,h:○○バイト表示 x:マウント除く）
+	du -shx ./*
+	du -smx ./* | sort -nr | head -5
+
+
+・サービス状態の表示
+	service --status-all
+	(/sbin/service --status-all)
+		FTP   :vsftpd
+		Telnet:xinetd
+		Apache:httpd
+
+・ファイル検索
+	更新日付が30日以上前のファイルのみ検索
+	find ./ -type f -mtime +30
+	更新日付が30日以上前のファイルのみ削除！
+	find ./ -type f -mtime +30 -exec rm -i {} \;
+
+・ファイル内検索
+	find 検索先 -type f -name 検索条件 | xargs grep 検索対象文字列
+	例）find ./ -type f -name "*" | xargs grep "aaa"
+	例）find ./ -type f -name "*" | xargs grep -I "aaa"   ※バイナリファイルを除外
+
+・ファイル監視
+	tail -f hoge.txt
+
+・空ディレクトリの検索
+	例）find . -type d -empty
+
+・空ディレクトリの削除
+	find 検索先 -type d -empty -exec 検索結果に対するコマンド {} \;
+	例）find ほげ -type d -empty -exec rmdir {} \;
+
+・フォルダ一括作成
+	mkdir -p ○○
+
+・ファイルの圧縮・解凍（zip版）　※圧縮すると元ファイルが消えるので注意！
+	gzip -引数 ○○ （-d:解凍）
+	例) gzip 201103??.log
+
+・ファイルの圧縮・解凍（tar版）
+	tar cvf 圧縮ファイル名 圧縮したいフォルダ
+	圧縮例）tar cvf test.tar test
+	展開例）tar xvf test.tar
+	展開例）tar xvf test.tar -C /tmp
+
+・ファイルの圧縮・解凍（tar版）
+	tar cvf 圧縮ファイル名 圧縮したいフォルダ
+	例）tar cvf test.tar tes
+
+
+・圧縮ファイル内容確認
+	zcat,zmore
+
+・日付の取得
+	`date '+%Y%m%d'`
+
+・ファイルやディレクトリのアクセス権を変更
+	chmod 権限情報 対象ファイル
+	例) chmod 777 hoge.txt
+	（オプション）-R：変更をファイル、ディレクトリ以下の全てに反映
+
+・ファイルの所有者、所有グループを変更
+	chown ユーザー名 ファイル名
+	chown :グループ名 ファイル名
+	chown ユーザー名:グループ名 ファイル名
+	（オプション）-R：変更をファイル、ディレクトリ以下の全てに反映
+
+・ユーザー情報表示
+	cat /etc/passwd
+
+・ユーザーグループ表示
+	id ユーザ名
+
+・実行中のプロセスの表示
+	ps -ef
+	top
+
+・使用しているポートの確認
+	lsof -i -n -P
+
+・全ユーザーのcron情報確認(root権限で実行)
+	more /var/spool/cron/*
+
+
+****************** viエディタ ******************
+・teraterm文字化けする場合の対処法
+	１．teratermの設定をSJISにする。
+	２．環境変数を変更する「LANG=ja_JP.sjis」
+	３．VIエディッタ起動後に「:set encoding=sjis」とする。
+
+
+・置換コマンド（確認付）
+	:%s/変更前/変更後/gc
+
+・検索
+	:/検索文字列
+		※「n」で順路検索、「N」で逆路検索
+
+
+******************* REDO.log分析(LogMiner) *******************
+EXECUTE SYS.DBMS_LOGMNR.ADD_LOGFILE(
+  LOGFILENAME => '/extsdb1/sanpai0_DB/redo01/sanpai0_redo2.log',
+  OPTIONS => SYS.DBMS_LOGMNR.NEW
+);
+
+EXECUTE SYS.DBMS_LOGMNR.START_LOGMNR(
+  OPTIONS => SYS.DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + SYS.DBMS_LOGMNR.COMMITTED_DATA_ONLY
+);
+
+SELECT
+    SEG_OWNER,
+    TO_CHAR(TIMESTAMP, 'YYYY/MM/DD HH24:MI:SS') AS TIMESTAMP,
+    TO_CHAR(COMMIT_TIMESTAMP, 'YYYY/MM/DD HH24:MI:SS') AS COMMIT_TIMESTAMP,
+    TABLE_NAME,
+    OPERATION,
+    SQL_REDO
+FROM V$LOGMNR_CONTENTS
+WHERE OPERATION IN ('DELETE')
+ORDER BY SEG_OWNER, TIMESTAMP, TABLE_NAME;
+
+※詳細は下記URL参照
+http://ameblo.jp/archive-redo-blog/entry-10078607148.html
+
+
+
+****************** アーカイブログ削除 ******************
+１、oracle権限でログイン(イントラ)
+oracle/oracle
+
+２、rmanにログイン
+rman target / nocatalog
+
+３、削除コマンド実行（1日以降前）
+delete archivelog until time 'sysdate-1';
+
+※間違えてOSコマンドでアーカイブログを削除してしまった場合の手順
+１、rman target / nocatalog
+２、crosscheck archivelog all;
+３、delete expired archivelog all;
+これでＯＫ
+
+
+
+参考URL：
+http://www.ostl.net/2007/02/post_16.html
+http://kibanse.blog50.fc2.com/blog-entry-3.html
+
+
+
+****************** カーソルチェック ******************
+select count(*),
+    USER_NAME,
+    SQL_TEXT
+from V$OPEN_CURSOR
+--where USER_NAME = 'ETMANI'
+group by USER_NAME, SQL_TEXT
+order by COUNT(*) DESC, USER_NAME, SQL_TEXT
+
+
+****************** カラム名の取得 ******************
+select
+    A.TABLE_NAME,
+    B.COMMENTS as TABLE_COMMENTS,
+    A.COLUMN_NAME,
+    C.COMMENTS as COLUMN_COMMENTS,
+    A.DATA_TYPE,
+    --A.DATA_LENGTH
+    nvl(A.DATA_PRECISION, A.CHAR_COL_DECL_LENGTH) as LENGTH
+from
+    USER_TAB_COLUMNS A
+        left join USER_TAB_COMMENTS B
+            on A.TABLE_NAME = B.TABLE_NAME
+        left join USER_COL_COMMENTS C
+            on A.TABLE_NAME = C.TABLE_NAME
+           and A.COLUMN_NAME = C.COLUMN_NAME
+where
+    B.TABLE_TYPE = 'TABLE'
+order by
+    A.TABLE_NAME,
+    A.COLUMN_ID
+
+
+****************** テーブル名の取得 ******************
+select
+     A.TABLE_NAME
+    ,B.COMMENTS
+from USER_TABLES A
+    inner join USER_TAB_COMMENTS B
+        on A.TABLE_NAME = B.TABLE_NAME
+order by A.TABLE_NAME
+;
+
+
+
+****************** Oracle spfileの修正方法 ******************
+設定ミスでマウント自体が出来なくなったときの手順
+
+１、spfile(バイナリ)からpfile(テキスト)を生成する。
+create pfile='～/tmp_pfile.ora' from spfile='～/spfile.ora';
+２、pfileを編集する。
+vi ～/tmp_pfile.ora
+３、pfileを使ってOracleを起動できるか確認する。
+startup pfile='～/tmp_pfile.ora'
+４、pfile(テキスト)からspfile(バイナリ)を生成する。
+create spfile='～/spfile.ora' from pfile='～/tmp_pfile.ora';
+５、普通に起動する。
+startup
+
+
+****************** 正規表現 ******************
+置換前：123-456789
+置換後：123456789
+
+・Java
+正規表現　　：(^.{3})-(.*)
+置換後文字列：$1$2
+
+・シェル
+正規表現　　：(^.{3})-(.*)
+置換後文字列：\1\2
+
+・不一致行の取得
+(?!検索条件)
+例）先頭が「10」ではない行全体に一致
+^(?!10).*$
+
+例）「abc」を含まない行全体に一致
+^((?!abc).)*$
+
+
+****************** apache - tomcat関係 ******************
+・apacheログ設定
+apache2/conf/httpd.conf
+CustomLog "|/usr/local/apache2_8001/bin/cronolog /opt2/httpd_8001/log/access_log%Y%m%d" common
+
+・tomcatログ設定
+/usr/local/tomcat5_8001/conf/server.xml
+<Logger className="org.apache.catalina.logger.FileLogger" 
+		directory="logs"  
+		prefix="localhost_log." 
+		suffix=".txt" 
+		timestamp="true"/>
+
+・ログローテート設定
+/etc/logrotate.conf
+
+・セッションタイムアウト時間
+http://localhost:8080/manager/sessions?path=/etmani-web
+
+******************* Excel *************************
+・シート名取得
+=RIGHT(CELL("filename",A1),LEN(CELL("filename",A1))-FIND("]",CELL("filename",A1)))
+
+・ファイル名取得
+=SUBSTITUTE(MID(CELL("filename"),SEARCH("[",CELL("filename"))+1, SEARCH("]",CELL("filename"))-SEARCH("[",CELL("filename"))-1),".xlsx","")
+=MID(CELL("filename"),SEARCH("[",CELL("filename"))+1, SEARCH("]",CELL("filename"))-SEARCH("[",CELL("filename"))-1)
+
+・文字コード
+改行：Char(10)
+"	：Char(34)
+
+・乱れにくい連番
+=MAX(A$1:INDEX(A:A,ROW()-1,0))+1
+
+******************* InternetExplorer8 **************************
+・セッション共有の解除方法
+１．IE8の「ファイル」→「新規セッション」を選択して別ウインドウを起動する。
+２．iexplorer -nomerge
