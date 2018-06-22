@@ -1,0 +1,43 @@
+VE導入_初期URL対応	【PA版】PH3-17-共通部品設計書-SdeliGyomuDispatcher.G01.xlsx
+VE導入_初期URL対応	【PA版】PH3-17-共通部品設計書-transcheck.G01.xlsx
+VE導入_初期URL対応	【PA版】PH3-17-共通部品設計書-screentrans.G01.xlsx
+VE導入_初期URL対応	【PA版】PH3-17-共通部品設計書-UserInfo.xlsx
+VE導入_初期URL対応	【PA版】PH3-17-共通部品設計書-ScreenTransCtrl.xlsx
+VE導入_初期URL対応	【PA版】PH3-11-メッセージ一覧-sdelilib.xlsm
+VE導入_初期URL対応	【PA版】PH3-16-共通部品一覧-sdelilib.xlsx
+VE導入_初期URL対応	SS-31-プログラム構成図-sdelilib.xlsx
+VE導入_初期URL対応	PS-14-定数一覧-sdelilib_trans.xlsm
+VE導入_初期URL対応	PT_アプリ基盤_PT仕様書兼成績書-SdeliGyomuDispatcher.xlsm
+VE導入_初期URL対応	PT_アプリ基盤_PT仕様書兼成績書-transcheck.G01.xlsm
+VE導入_初期URL対応	PT_アプリ基盤_PT仕様書兼成績書-screentrans.xlsm
+VE導入_初期URL対応	PT_アプリ基盤_PT仕様書兼成績書-UserInfo.xlsm
+VE導入_初期URL対応	PT_アプリ基盤_PT仕様書兼成績書-ScreenTransCtrl.xlsm
+VE導入_初期URL対応	IT_アプリ基盤_①設計標準 共通部品_テスト仕様書兼成績書(初期ＵＲＬ対応).xlsm
+VE導入_初期URL対応	IT_アプリ基盤_①設計標準 共通部品_エビデンス(初期ＵＲＬ対応).xlsm
+その他	PISC向け週次進捗報告資料×５
+	
+ユーザマスタメンテ	UI-11-機能一覧-sdelivery.sdelikanyu.xlsx
+ユーザマスタメンテ	UI-13-サブシステム構成図-sdelivery.sdelikanyu.xlsx
+ユーザマスタメンテ	UI-30-機能概要-K01801.xlsx
+ユーザマスタメンテ	UI-31-画面一覧-sdelivery.sdelikanyu.xlsx
+ユーザマスタメンテ	UI-33-オンライン設計書-K01801.xlsx
+ユーザマスタメンテ	SS-11-メッセージ一覧-sdelikanyu.main.xlsx
+ユーザマスタメンテ	SS-15-項目設計書-sdelikanyu.main.xlsx
+ユーザマスタメンテ	SS-31-プログラム関連図-sdelikanyu.main.xlsx
+ユーザマスタメンテ	SS-32-プログラム一覧-sdelikanyu.main.xlsx
+ユーザマスタメンテ	SS-36-ロジック一覧-sdelikanyu.main.xlsx
+ユーザマスタメンテ	PS-81-使用SQL一覧-sdelikanyu.main.xlsx
+ユーザマスタメンテ	PS-82-SQL定義書-TM_ID_KNR_U_GRP.xlsm
+ユーザマスタメンテ	PS-82-SQL定義書-TM_USR_GRP.xlsm
+ユーザマスタメンテ	PS-82-SQL定義書-TM_NINK_KNR_U_GRP.xlsm
+ユーザマスタメンテ	PS-82-SQL定義書-TM_USR_NINK_GRP.xlsm
+ユーザマスタメンテ	PS-34-ロジック設計書-IdKnrULogic.xlsx
+ユーザマスタメンテ	PS-34-ロジック設計書-UsrGrpLogic.xlsx
+ユーザマスタメンテ	PS-34-ロジック設計書-NinkKnrULogic.xlsx
+ユーザマスタメンテ	PS-34-ロジック設計書-UsrNinkGrpLogic.xlsx
+ユーザマスタメンテ	PS-31-オンライン設計書-K018.G01.xlsx
+ユーザマスタメンテ	PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_IdKnrULogic.xlsm
+ユーザマスタメンテ	PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_UsrGrpLogic.xlsm
+ユーザマスタメンテ	PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_NinkKnrULogic.xlsm
+ユーザマスタメンテ	PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_UsrNinkGrpLogic.xlsm
+ユーザマスタメンテ	PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_K01801.G01.xlsm
