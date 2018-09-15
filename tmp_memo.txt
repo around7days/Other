@@ -1,41 +1,91 @@
-【エイブ】
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書-SdeliGyomuDispatcher.G01.xlsx
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書-transcheck.G01.xlsx
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書-screentrans.G01.xlsx
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書-UserInfo.xlsx
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書-ScreenTransCtrl.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_SdeliGyomuDispatcher.G01.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_transcheck.G01.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_screentrans.G01.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_UserInfo.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_ScreenTransCtrl.xlsx
-IT_アプリ基盤_９月リリース_テストエビデンス_K00201.xlsm
+package sample;
 
-【ビーフォワード】
-PS-31-オンライン設計書-K017.G01.xlsx
-PS-31-オンライン設計書-K017.G02.xlsx
-PS-31-オンライン設計書-K018.G01.xlsx
-PS-34-ロジック設計書-IdKnrULogic.xlsx
-PS-34-ロジック設計書-MenuLogic.xlsx
-PS-34-ロジック設計書-MenuLogic.xlsx
-PS-34-ロジック設計書-UserKnrGrpLogic.xlsx
-PS-34-ロジック設計書-UsrGrpLogic.xlsx
-PS-81-使用SQL一覧-sdelikanyu.main.xlsx
-PS-81-使用SQL一覧-sdelikanyu.main.xlsx
-PS-82-SQL定義書-TM_MN_GMU.xlsm
-PS-82-SQL定義書-TM_MN_GRP.xlsm
-PS-82-SQL定義書-TM_USER_ID_KNR_GRP.xlsm
-PS-82-SQL定義書-TM_USER_ID_KNR_U.xlsm
-PS-82-SQL定義書-TM_USR_SKB.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_K01701.G01.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_K01701.G02.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_K01801.G01.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_MenuGmuLogic.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_MenuLogic.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_UserIdKnrGrpLogic.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_UserIdKnrULogic.xlsm
-PT_アプリ基盤_③ID加入管理_PT仕様書兼成績書_UsrSkbLogic.xlsm
-IT_アプリ基盤_９月リリース_テストエビデンス_K01701.xlsm
-IT_アプリ基盤_９月リリース_テストエビデンス_K01801.xlsm
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書_K01701.xlsm
-IT_アプリ基盤_９月リリース_テスト仕様書兼成績書_K01801.xlsm
+import java.util.List;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class TestSpringApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(TestSpringApplication.class, args);
+	}
+
+	public List<Alert> setAlertKey(List<Alert> tree) {
+
+		int first = -1;
+		int last = -1;
+		for (int targetLevel = 1; targetLevel <= 4; targetLevel++) {
+			System.out.println("◆◆対象階層=" + targetLevel);
+			for (int index = 0; index < tree.size(); index++) {
+				Alert alert = tree.get(index);
+
+				// 開始判定
+				if (alert.level == targetLevel) {
+					first = index;
+					System.out.println("first=" + first);
+				}
+
+				// 開始していない場合は次のレコードに進む
+				if (first == -1) {
+					continue;
+				}
+
+				// 終了判定
+				boolean isLast = (tree.size() == index + 1);
+				if (isLast) {
+					// 最終行チェック
+					last = index;
+					System.out.println("last=" + last);
+				} else {
+					// 階層範囲終了チェック
+					Alert nextAlert = tree.get(index + 1);
+					if (nextAlert.level <= targetLevel) {
+						last = index;
+						System.out.println("last=" + last);
+					}
+				}
+
+				// 開始・終了範囲が確定した場合はアラートキーを反映
+				if (first != -1 && last != -1) {
+					System.out.println("★反映：" + first + "-" + last);
+					// 反映処理
+					refrectKey(tree, first, last);
+					// 初期化
+					first = -1;
+					last = -1;
+				}
+			}
+		}
+
+		return tree;
+	}
+
+	private void refrectKey(List<Alert> tree, int first, int last) {
+		StringBuilder alertKeys = new StringBuilder();
+		for (int i = first; i <= last; i++) {
+			Alert alert = tree.get(i);
+			if (alert.key.isEmpty()) {
+				continue;
+			}
+
+			if (alertKeys.length() > 0) {
+				alertKeys.append(",");
+			}
+			alertKeys.append(alert.key);
+		}
+		tree.get(first).key = alertKeys.toString();
+	}
+
+}
+
+class Alert {
+	int level;
+	String key;
+
+	Alert(int level, String key) {
+		this.level = level;
+		this.key = key;
+	}
+}
