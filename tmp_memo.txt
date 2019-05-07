@@ -1,91 +1,42 @@
-package sample;
+【ターゲット業務、顧客、開発規模の検討】
 
-import java.util.List;
+■産業
+生活に必要な物的財貨および用役を生産する活動。
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+第1次産業 － 農業、林業、水産業など、狩猟、採集。
+第2次産業 － 製造業、建設業など、工業生産、加工業。電気・ガス・水道業
+第3次産業 － 情報通信業、金融業、運輸業、小売業、サービス業など、非物質的な生産業、配分業。
 
-@SpringBootApplication
-public class TestSpringApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TestSpringApplication.class, args);
-	}
+■基幹システム
+企業がビジネスを行っていく際に根幹となる業務システムのことを指します。
 
-	public List<Alert> setAlertKey(List<Alert> tree) {
+生産管理システム
+販売管理システム
+在庫管理システム
+受発注管理システム
+財務/会計システム
+人事給与システム
 
-		int first = -1;
-		int last = -1;
-		for (int targetLevel = 1; targetLevel <= 4; targetLevel++) {
-			System.out.println("◆◆対象階層=" + targetLevel);
-			for (int index = 0; index < tree.size(); index++) {
-				Alert alert = tree.get(index);
 
-				// 開始判定
-				if (alert.level == targetLevel) {
-					first = index;
-					System.out.println("first=" + first);
-				}
+■情報系システム
+ある部門における特定の作業などを効率化させる仕組みを指します。
+業務システムや周辺システムと呼ばれたりもする。
 
-				// 開始していない場合は次のレコードに進む
-				if (first == -1) {
-					continue;
-				}
 
-				// 終了判定
-				boolean isLast = (tree.size() == index + 1);
-				if (isLast) {
-					// 最終行チェック
-					last = index;
-					System.out.println("last=" + last);
-				} else {
-					// 階層範囲終了チェック
-					Alert nextAlert = tree.get(index + 1);
-					if (nextAlert.level <= targetLevel) {
-						last = index;
-						System.out.println("last=" + last);
-					}
-				}
+■基幹システムと情報系システムの違い
+・基幹システム
+利用範囲　：全社的
+性質　　　：止まると大打撃
 
-				// 開始・終了範囲が確定した場合はアラートキーを反映
-				if (first != -1 && last != -1) {
-					System.out.println("★反映：" + first + "-" + last);
-					// 反映処理
-					refrectKey(tree, first, last);
-					// 初期化
-					first = -1;
-					last = -1;
-				}
-			}
-		}
+・情報系システム
+利用範囲　：部門単位
+性質　　　：止まっても何とかなる
 
-		return tree;
-	}
 
-	private void refrectKey(List<Alert> tree, int first, int last) {
-		StringBuilder alertKeys = new StringBuilder();
-		for (int i = first; i <= last; i++) {
-			Alert alert = tree.get(i);
-			if (alert.key.isEmpty()) {
-				continue;
-			}
+★ターゲット業務
+第2次産業 － 製造業、建設業
 
-			if (alertKeys.length() > 0) {
-				alertKeys.append(",");
-			}
-			alertKeys.append(alert.key);
-		}
-		tree.get(first).key = alertKeys.toString();
-	}
+★顧客
 
-}
-
-class Alert {
-	int level;
-	String key;
-
-	Alert(int level, String key) {
-		this.level = level;
-		this.key = key;
-	}
-}
+★開発規模
