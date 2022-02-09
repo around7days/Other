@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- Bootstrap CSS -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+			crossorigin="anonymous"
+		/>
+
+		<!-- Handsontable CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css" />
+		<title>Hello, world!</title>
+	</head>
+	<body>
+		<h1>Hello, world!</h1>
+
+		<div>
+			<div id="example1" class="hot"></div>
+			<div class="controls">
+				<button class="btn btn-outline-primary btn-sm" id="export-file">Download CSV</button>
+				<button class="btn btn-outline-primary btn-sm" id="export-json">Get Json Data</button>
+			</div>
+		</div>
+
+		<!-- Bootstrap JS -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+			crossorigin="anonymous"
+		></script>
+
+		<!-- Handsontable JS -->
+		<script
+			type="text/javascript"
+			src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"
+		></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/handsontable/dist/languages/ja-JP.js"></script>
+
+		<!-- 独自 JS -->
+		<script>
+			// テストデータ
+			let testData = [
+				{ id: 1, name: "太郎", address: "tokyo", sex: "男", date: "1984-01-01" },
+				{ id: 2, name: "次郎", address: "osaka", sex: "男" },
+				{ id: 3, name: "三郎", address: "kyoto", sex: "男" },
+				{ id: 4, name: "花子", address: "saitama", sex: "女" },
+			];
+
+			// テーブル生成
+			const container = document.querySelector("#example1");
+			const hot = new Handsontable(container, {
+				data: testData,
+				width: "100%",
+				height: "auto",
+				columns: [
+					{ type: "checkbox", title: "対象", width: 60, className: "htCenter" },
+					{ data: "id", type: "numeric", title: "ID", width: 60, readOnly: true },
+					{ data: "name", title: "名称" },
+					{ data: "sex", type: "dropdown", title: "性別", width: 60, source: ["男", "女"] },
+					{ data: "date", type: "date", title: "生年月日", placeholder: "yyyy-mm-dd" },
+					{ data: "address", title: "住所" },
+					{ data: "biko", title: "備考", width: 200 },
+				],
+				dateFormat: "YYYY-MM-DD",
+				rowHeaders: true,
+				language: "ja-JP",
+				fixedColumnsLeft: 4, // 列固定
+				manualColumnResize: true, // 列幅操作
+				manualRowResize: true, // 行幅操作
+				hiddenColumns: true, // 列非表示操作
+				columnSorting: true, // ソート操作
+				trimRows: true, // trim設定
+				dropdownMenu: true, // 列メニュー設定
+				filters: true, // 列フィルタ設定
+				// wordWrap: false, // 折り返し表示
+				allowInsertColumn: false, // 列追加操作
+				allowInsertRow: false, // 行追加操作
+				allowRemoveColumn: false, // 列削除操作
+				allowRemoveRow: false, // 行削除操作
+				strict: true, // 厳密モード
+				fillHandle: false, // autoFill設定
+				contextMenu: [`hidden_columns_show`, `hidden_columns_hide`],
+				licenseKey: "non-commercial-and-evaluation",
+			});
+
+			// CSVファイル出力
+			const exportPlugin = hot.getPlugin("exportFile");
+			const button1 = document.querySelector("#export-file");
+			button1.addEventListener("click", () => {
+				exportPlugin.downloadFile("csv", {
+					bom: false,
+					columnDelimiter: ",",
+					columnHeaders: false,
+					exportHiddenColumns: true,
+					exportHiddenRows: true,
+					fileExtension: "csv",
+					filename: "Handsontable-CSV-file_[YYYY]-[MM]-[DD]",
+					mimeType: "text/csv",
+					rowDelimiter: "\r\n",
+					rowHeaders: true,
+				});
+			});
+
+			// Jsonデータ取得
+			const button2 = document.querySelector("#export-json");
+			button2.addEventListener("click", () => {
+				let json = JSON.stringify(hot.getData());
+				console.log("-------------------------");
+				console.log(json);
+				console.log("-------------------------");
+			});
+		</script>
+	</body>
+</html>
