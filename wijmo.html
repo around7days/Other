@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>FlexGrid入門</title>
+
+		<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<!-- Bootstrap JS -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+		<!-- Wijmoのスタイルとコア（必須） -->
+		<link href="https://cdn.grapecity.com/wijmo/5.20213.824/styles/wijmo.min.css" rel="stylesheet" />
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.min.js"></script>
+
+		<!-- Wijmoコントロール（オプション。必要なコントロールを含める） -->
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.grid.min.js"></script>
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.grid.filter.min.js"></script>
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.chart.min.js"></script>
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.input.min.js"></script>
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/wijmo.gauge.min.js"></script>
+
+		<!-- Wijmoカスタムカルチャー（オプション。必要なカルチャーを含める） -->
+		<script src="https://cdn.grapecity.com/wijmo/5.20213.824/controls/cultures/wijmo.culture.ja.min.js"></script>
+
+		<!-- JS独自実装 -->
+		<script>
+			/**
+			 * 初期処理
+			 */
+			document.addEventListener("DOMContentLoaded", () => {
+				// flexGrid生成
+				let flexGrid = new wijmo.grid.FlexGrid("#Wijmo_FlexGrid", {
+					itemsSource: getData(),
+					columns: [
+						{ binding: "id", header: "ID", width: 60, isReadOnly: true },
+						{ binding: "name", header: "名称" },
+						{ binding: "cost", header: "価格" },
+						{ binding: "date", header: "日付" },
+						{ binding: "biko", header: "備考1", width: 400 },
+						{ binding: "biko", header: "備考2", width: 400 },
+					],
+					autoGenerateColumns: false,
+					autoClipboard: true, // クリップボードコピー
+					allowDragging: "None",
+					allowResizing: "BothAllCells", // 行列幅の手動変更
+					allowSorting: false, // ソート順変更（フィルタ内で実行させる）
+					frozenColumns: 1, // 列固定
+					keyActionEnter: "MoveDown",
+					keyActionTab: "CycleOut", // タブキーでセル移動（ループ付き）
+					showSelectedHeaders: "All",
+				});
+
+				// フィルタ設定
+				let filter = new wijmo.grid.filter.FlexGridFilter(flexGrid);
+
+				let exportButton = document.querySelector("#export-excel");
+				exportButton.addEventListener("click", () => {
+					new wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(
+						flexGrid,
+						{
+							includeColumnHeaders: true,
+							includeCellStyles: false,
+						},
+						"FlexGrid.xlsx"
+					);
+				});
+			});
+
+			function getData() {
+				let datasource = [
+					{ id: 1, name: "ポテトチップス", cost: 120, date: "2022/01/01", biko: "ふぁさふぁｓふぁｓふぁｓ" },
+					{ id: 2, name: "ポッキー", cost: 120, date: "2022/01/01" },
+					{ id: 3 },
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+				];
+				return datasource;
+			}
+		</script>
+	</head>
+
+	<!--HTML-->
+	<body>
+		<main class="form">
+			<form>
+				<div class="container-fluid">
+					<h1 class="h3 mb-3 fw-normal">Wijmoサンプル</h1>
+					<div id="Wijmo_FlexGrid" style="height: auto; max-height: 300px; width: 800px"></div>
+					<div>
+						<button class="btn btn-outline-primary btn-sm" id="export-excel">Download Excel</button>
+					</div>
+				</div>
+			</form>
+		</main>
+	</body>
+</html>
